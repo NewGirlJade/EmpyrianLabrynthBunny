@@ -9,14 +9,41 @@ def main() -> None:
     screen_width = 16
     screen_height = 16
 
-    tilesheet_width = 16  # this is the number of tile columns in the tilesheet
-    tilesheet_height = 16  # this is the number of tile rows in the tilesheet
-    tileset = tcod.tileset.load_tilesheet(
+    tilesheet1 = dict(
+        width=16,
+        height=16,
         path="sprites/DarkondDigsDeeper_16x16.png",
-        columns=tilesheet_width,
-        rows=tilesheet_height,
+    )
+    tilesheet = dict(
+        width=5,
+        height=3,
+        path="sprites/woods-5x3.png",
+        names=[
+            "corner_nw",
+            "top",
+            "corner_ne",
+            "pichu",
+            "mew",
+            "left",
+            "grass",
+            "right",
+            "ground0",
+            "ground1",
+            "corner_sw",
+            "bottom",
+            "corner_se",
+            "ground3",
+            "ground4",
+        ],
+    )
+
+    tileset = tcod.tileset.load_tilesheet(
+        path=tilesheet["path"],
+        columns=tilesheet["width"],
+        rows=tilesheet["height"],
+        # the width and height here represent the tile collumns and rows of the tilesheet, respectively, not neccesarily the pixel density thereof
         charmap=(
-            num for num in range(160, 160 + tilesheet_height * tilesheet_width, 1)
+            num for num in range(160, 160 + tilesheet["height"] * tilesheet["width"], 1)
         ),  # starting the charmap at 160 to avoid utf-8 control characters at 0-32 and 126-59
     )
 
@@ -33,6 +60,13 @@ def main() -> None:
         char = 160
         while True:  # Main loop, runs until SystemExit is raised.
             root_console.print(x=1, y=1, string=chr(char))
+            root_console.print(
+                x=2,
+                y=2,
+                string=chr(
+                    160 + tilesheet["names"].index("mew")
+                ),  # the charmap starts at 160 to avoid any utf-8 control characters.
+            )
             print("char: " + str(char) + ", Utf-8 encoded as: " + str(chr(char)))
             context.present(root_console, integer_scaling=True)
             # Show the console.
